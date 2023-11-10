@@ -9,23 +9,27 @@
 7 - Create 4 partitions
 	- boot :: Size 512MiB :: Code EF00
 	- swap :: Size [varies] :: Code 8200
-	- root :: Size [varies] :: Code 8300
+	- root :: Size [varies - I recommend 30GB bare min] :: Code 8300
 	- home :: Size [varies] :: Code 8300
+	Notes: Leave sectors blank to use all of the space. If you want the size
+		to be specific, enter that for the last sector. For the root and
+		home directories, you can leave the code blank as the default is
+		8300.
 8 - Write changes, enter yes, then navigate to quit
 9 - lsblk to confirm changes
 10 - Format partitions
-	- boot :: mkfs.fat -F32 /dev/[drivename]1
-	- swap :: mkswap /dev/[drivename]2 :: swapon /dev/[drivename]2
-	- root :: mkfs.ext4 /dev/[drivename]3
-	- home :: mkfs.ext4 /dev/[drivename]4
+	- boot :: mkfs.vfat -F 32 /dev/sdX1
+	- swap :: mkswap /dev/sdX2 :: swapon /dev/sdX2
+	- root :: mkfs.ext4 /dev/sdX3
+	- home :: mkfs.ext4 /dev/sdX4
 11 - lsblk to confirm formatting
 12 - Mount filesystems
-	- root :: mount /dev/[drivename]3 /mnt
+	- root :: mount /dev/sdX3 /mnt
 	- mkdir /mnt/boot
 	- mkdir /mnt/boot/efi (for UEFI)
 	- mkdir /mnt/home
-	- boot :: mount /dev/[drivename]1 /mnt/boot OR /mnt/boot/efi (for UEFI)
-	- home :: mount /dev/[drivename]4 /mnt/home
+	- boot :: mount /dev/sdX1 /mnt/boot OR /mnt/boot/efi (for UEFI)
+	- home :: mount /dev/sdX4 /mnt/home
 13 - Generate mirrorlist
 	- cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 	- sudo pacman -Sy pacman-contrib (needed to access rankmirrors)
@@ -37,7 +41,7 @@
 	- *optional* to view fstab and ensure correct generation :: nano /mnt/etc/fstab
 16 - Chroot time!
 	1 - arch-chroot /mnt
-	2 - sudo pacman -Sy neovim bash-completion
+	2 - sudo pacman -Sy neovim (or cli text editor of choice) bash-completion
 	3 - Generate Locales
 		- nvim /etc/locale.gen
 		- Uncomment the lines :: en_US.UTF-8 UTF-8 :: en_US ISO-8859-1
@@ -45,15 +49,18 @@
 		- echo LANG=en_US.UTF-8 > /etc/locale.conf
 		- export LANG=en_US.UTF-8
 	4 - Set up Time Zones
-		- ln -sf /usr/share/zoneinfo/America/New_York > /etc/localtime
+		- ln -sf /usr/share/zoneinfo/America/New_York > /etc/localtime  # This is for me, I'm in EST
 	5 - Sync HW clock
-		- hwclock --systohc --utc
+		- hwclock --systohc
 	6 - Generate Hostname
 		- echo [desired_hostname] > /etc/hostname
 	7 - For SSDs, enable TRIM support
 		- systemctl enable fstrim.timer
 	8 - Enable 32-bit support
 		- nvim /etc/pacman.conf
+		- *optional* Near the top of the config, uncomment "Color", "VerbosePkgLists",
+			and (if desired) "ParallelDownloads". Just after that, add the line
+			"ILoveCandy" for a better looking pacman experience.
 		- Search multilib
 		- Uncomment :: [multilib] :: Include = /etc/pacman.d/mirrorlist
 		- sudo pacman -Sy to update packages, now including multilib
@@ -74,11 +81,11 @@
 			- mount -t efivarfs efivarfs /sys/firmware/efi/efivars/
 			- grub-install /dev/[drivename]
 			- sudo pacman -S intel-ucode
-			- grub-mkconfig -o /boot/grub/grub.cfg
+			- grub-mkconfig -o /boot/grub/grub.cfg  # You can wait until the very end to run this
 	12 - Initialize and install Network services
 		- ip link
 		- sudo pacman -S dhcpcd
-		- sudo systemctl enable dhcpcd@[network].service
+		- sudo systemctl enable dhcpcd@[network].service  # Not really necessary, would only really run on a desktop with a connection via ethernet
 		- sudo pacman -S networkmanager
 		- sudo systemctl enable NetworkManager.service
 	13 - Install graphics drivers
@@ -95,4 +102,4 @@
 		- umount -R /mnt
 		- reboot
 
-##### Arch is now installed! #####
+##### Arch is now installed! Congrats, you use Arch btw :) #####
