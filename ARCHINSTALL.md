@@ -64,6 +64,7 @@
     - Note: At this point you will not have a text editor. Install your preferred terminal text editor.
     - Popular options: emacs, nano, neovim, vim, vi
     - pacman -Sy bash-completion
+      
     - Generate Locales
         - Open /etc/locale.gen in your favourite text editor
         - Uncomment these lines:
@@ -72,16 +73,21 @@
         - locale-gen
         - echo LANG=en_US.UTF-8 > /etc/locale.conf
         - export LANG=en_US.UTF-8
+          
     - Set up Time Zones
         - To find out which one you need, use ls /usr/share/zoneinfo/
         - If you live in the US and are in Eastern Time, just use the line below.
         - ln -sf /usr/share/zoneinfo/America/New_York > /etc/localtime
+          
     - Sync HW Clock
         - hwclock --systohc --localtime
+          
     - Generate Hostname
         - echo [YOUR_HOSTNAME] > /etc/hostname
+          
     - Enable TRIM support for SSDs (if you have one)
         - systemctl enable fstrim.timer
+          
     - Enable 32-bit support (Edit Pacman configuration)
         - nvim /etc/pacman.conf
         - *OPTIONAL* Uncomment "Color", "VerbosePkgLists", "ParallelDownloads"
@@ -90,19 +96,23 @@
             - [multilib]
             - Include = /etc/pacman.d/mirrorlist
         - pacman -Sy to update packages
+          
     - Setup root and user accounts
         - passwd :: Enter this for a root password. Enter your chosen root password.
             - If you do not want a separate root password, skip this step.
         - useradd -m -g users -G wheel,storage,power -s /bin/bash [USERNAME]
         - passwd [USERNAME] :: Enter your chosen password for the user
+          
     - Edit sudo configuration
         - EDITOR=nvim visudo
         - Uncomment this line:
             - %wheel ALL=(ALL:ALL)
         - At the EOF, add :: Defaults rootpw (if you set a root password)
+          
     - Install Networking services
         - pacman -S networkmanager
         - systemctl enable NetworkManager
+          
     - Install graphics drivers
         - For Nvidia
             - pacman -S nvidia-dkms libglvnd nvidia-utils opencl-nvidia lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings
@@ -110,11 +120,13 @@
             - Add (in this order) inside of Modules=() :: nvidia nvidia_modeset nvidia_uvm nvidia_drm
         - For Intel Integrated Graphics
             - pacman -S mesa lib32-mesa xf86-video-intel vulkan-intel lib32-vulkan-intel
+              
     - Install CPU Microcode
         - Intel
             - pacman -S intel-ucode
         - AMD
             - pacman -S amd-ucode
+              
     - Install Bootloader of Choice
         - For systemd
             - *TO BE ADDED LATER*
@@ -128,4 +140,4 @@
     - umount -R /mnt
     - reboot
 
-# Congratulations! You have just installed Arch Linux! :) Btw, you use Arch!
+## Congratulations! You have just installed Arch Linux! :) Btw, you use Arch!
