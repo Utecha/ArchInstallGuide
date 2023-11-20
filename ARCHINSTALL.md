@@ -22,6 +22,7 @@
     - Swap will vary based on the amount of RAM you have.
     - For root, either use what is left, or recommended around 40GB if you prefer a separate /home partition.
     - For the codes, just hit Enter for both the root and home partitions as 8300 is the default.
+      
     ## My Setup (single drive)
     - Size 512M :: Code EF00 :: BOOT
     - Size 16G :: Code 8200 :: SWAP
@@ -30,14 +31,16 @@
     - Hit enter on "Write", type 'yes', then hit enter on "Quit"
 
 6. Confirm changes with lsblk, then format the partitions
-    ## Note: If you followed this guide, BOOT will always be Partition 1, SWAP 2, ROOT 3, and HOME 4
+    - Note: If you followed this guide, BOOT will always be Partition 1, SWAP 2, ROOT 3, and HOME 4
+   
     - BOOT :: mkfs.vfat -F 32 /dev/sdX1
     - SWAP :: mkswap /dev/sdX2 :: swapon /dev/sdX2
     - ROOT :: mkfs.ext4 /dev/sdX3
     - HOME :: mkfs.ext4 /dev/sdX4
 
 7. Mount your filesystems
-    ## ROOT should always be mounted first!
+    - ROOT should always be mounted first!
+   
     - ROOT :: mount /dev/sdX3 /mnt
     - BOOT :: mount --mkdir /dev/sdX1 /mnt/boot/efi
     - HOME :: mount --mkdir /dev/sdX4 /mnt/home
