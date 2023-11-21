@@ -51,7 +51,7 @@
     - rankmirrors -n 10 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
 
 9. Strap on your seatbelts! Time for the pacstrap!
-    - Note: If you want the Linux Zen kernal, replace "linux" with "linux-zen" and "linux-zen-headers"
+    - Note: If you want the Linux Zen kernel, replace "linux" with "linux-zen" and "linux-zen-headers"
     - GRUB and efibootmgr are only necessary if you want to use GRUB over systemd boot
     - pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr
 
